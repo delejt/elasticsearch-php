@@ -1,0 +1,27 @@
+{
+  "took": 1,
+  "timed_out": false,
+  "_shards": {
+    "total": 5,
+    "successful": 5,
+    "failed": 0
+  },
+  "hits": {
+    "total": 1,
+    "max_score": null,
+    "hits": [{
+      "_index": "books",
+      "_type": "ancient",
+      "_id": "0001",
+      "_score": null,
+      "_source": {
+        "id": "0001",
+        "updated": "2017-01-01T00:00:00",
+        "year": 1980,
+        "published": false,
+        "name": "My book two"
+      },
+      "sort": [1980]
+    }]
+  }
+}
