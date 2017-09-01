@@ -3,7 +3,6 @@
 namespace LegalThings;
 
 use Exception;
-use function Jasny\camelcase;
 
 /**
  * Filters in Elasticsearch are constructed of rather complicated, nested, data structures
@@ -189,5 +188,18 @@ class ElasticFilter
         $query['bool']['must'][]['term'][$field] = $value;
         
         return $this;
+    }
+    
+    
+    /**
+     * Turn a sentence, camelCase, snake_case or kabab-case into camelCase
+     *
+     * @param string $string
+     * @return string
+     */
+    protected function camelcase($string)
+    {
+        $sentence = preg_replace('/[\W_]+/', ' ', $string);
+        return lcfirst(str_replace(' ', '', ucwords($sentence)));
     }
 }

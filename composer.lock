@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e030b43d86485b0bc3dbd252b002c698",
+    "content-hash": "7258d343c7b9cb7a40400e6b581f0720",
     "packages": [
         {
             "name": "elasticsearch/elasticsearch",
@@ -161,52 +161,6 @@
                 "stream"
             ],
             "time": "2014-10-12T19:18:40+00:00"
-        },
-        {
-            "name": "jasny/php-functions",
-            "version": "v3.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jasny/php-functions.git",
-                "reference": "ee00d879a0de354469f544a40b7cfecbdd5e2344"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/jasny/php-functions/zipball/ee00d879a0de354469f544a40b7cfecbdd5e2344",
-                "reference": "ee00d879a0de354469f544a40b7cfecbdd5e2344",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.6"
-            },
-            "require-dev": {
-                "jasny/php-code-quality": "^2.0"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [
-                    "src/array_functions.php",
-                    "src/case_functions.php",
-                    "src/string_functions.php",
-                    "src/server_functions.php",
-                    "src/type_functions.php",
-                    "src/file_functions.php",
-                    "src/func_functions.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Arnold Daniels",
-                    "email": "arnold@jasny.net",
-                    "homepage": "http://www.jasny.net"
-                }
-            ],
-            "description": "A set of useful PHP functions",
-            "time": "2017-07-03T20:12:46+00:00"
         },
         {
             "name": "psr/log",
