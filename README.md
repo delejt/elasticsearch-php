@@ -1,11 +1,15 @@
 Legal Things - Elasticsearch PHP
 ==================
 
-This library provides you with a simplified interface to use Elasticsearch.
+This library aims to provide you with a simplified interface to use Elasticsearch.
+Internally it uses the original [elastic/elasticsearch-php](https://github.com/elastic/elasticsearch-php) library.
+The client of the original library is exposed and can be used if you require more advanced functionality.
 
 ## Requirements
 
 - [PHP](http://www.php.net) >= 5.6.0
+- [Elasticsearch](https://www.elastic.co/blog/elasticsearch-5-3-0-released) ~5.3.0
+
 
 _Required PHP extensions are marked by composer_
 
@@ -117,6 +121,25 @@ $this->assertEquals([
         ]
     ]
 ], $query);
+```
+
+
+## Mapping
+
+The library comes with predefined [Elasticsearch mappings](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html#mapping) that you can use.
+See [this](https://github.com/legalthings/elasticsearch-php/blob/master/src/ElasticMap.php) file for more maps.
+The maps can be easily extended since they are just arrays.
+Feel free to contribute by adding more frequently used maps.
+
+```php
+use LegalThings/ElasticMap;
+
+$es = new Elasticsearch($config);
+
+$result = $es->client->indices()->create([
+    'index' => 'my_index',
+    'body' => ElasticMap::getFullTextSearchMapping()
+]);
 ```
 
 
