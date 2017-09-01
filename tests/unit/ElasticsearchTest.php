@@ -21,14 +21,6 @@ class ElasticsearchTest extends Test
         ];
     }
     
-    protected function getMockHandler($response, $status = 200)
-    {
-        return new MockHandler([
-          'status' => $status,
-          'body' => $response
-        ]);
-    }
-    
     
     public function testConstruct()
     {
