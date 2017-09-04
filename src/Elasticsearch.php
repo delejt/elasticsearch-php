@@ -40,14 +40,16 @@ class Elasticsearch
      */
     protected function create($config)
     {
-        $client = ClientBuilder::fromConfig((array)$config);
-
+        $quiet = isset($config->quiet) ? $config->quiet : false;
+        
+        $client = ClientBuilder::fromConfig((array)$config, $quiet);
+        
         return $client;
     }
     
     
     /**
-     * Index data in Elasticsearch only giving basic parameters
+     * Index data in Elasticsearch
      * 
      * @param string       $index   index name
      * @param string       $type    index type
@@ -69,7 +71,7 @@ class Elasticsearch
     }
     
     /**
-     * Get data in Elasticsearch only giving basic parameters
+     * Get data in Elasticsearch
      * 
      * @param string       $index   index name
      * @param string       $type    index type
@@ -89,7 +91,7 @@ class Elasticsearch
     }
     
     /**
-     * Delete data in Elasticsearch only giving basic parameters
+     * Delete data in Elasticsearch
      * 
      * @param string       $index   index name
      * @param string       $type    index type
@@ -109,7 +111,7 @@ class Elasticsearch
     }
     
     /**
-     * Search through Elasticsearch only giving basic parameters
+     * Search through Elasticsearch
      * This function will take care of transforming filters and queries to data that Elasticsearch expects
      * 
      * @param string       $index   index name
@@ -158,5 +160,56 @@ class Elasticsearch
         ];
 
         return $this->client->search($params);
+    }
+    
+    
+    /**
+     * Create an index in Elasticsearch
+     * 
+     * @param string       $index   index name
+     * @param array|object $data    configuration for the index
+     * 
+     * @return array
+     */
+    public function indexCreate($index, $data = [])
+    {
+        $params = [
+            'index' => $index,
+            'body' => $data
+        ];
+
+        return $this->client->indices()->create($params);
+    }
+    
+    /**
+     * Delete an index in Elasticsearch
+     * 
+     * @param string       $index   index name
+     * 
+     * @return array
+     */
+    public function indexDelete($index)
+    {
+        $params = [
+            'index' => $index
+        ];
+
+        return $this->client->indices()->delete($params);
+    }
+    
+    /**
+     * Check if an index exists in Elasticsearch
+     * 
+     * @param string       $index   index name
+     * 
+     * @return boolean
+     */
+    public function indexExists($index)
+    {
+        $params = [
+            'index' => $index
+        ];
+
+        return $this->client->indices()->exists($params);
     }
 }

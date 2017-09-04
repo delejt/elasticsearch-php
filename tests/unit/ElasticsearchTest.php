@@ -148,4 +148,64 @@ class ElasticsearchTest extends Test
         
         $this->assertEquals('0001', $result['hits']['hits'][0]['_source']['id']);
     }
+    
+    
+    public function testIndexCreate()
+    {
+        $config = $this->getConfig();
+        $config['handler'] = new MockHandler([
+            'status' => 200,
+            'transfer_stats' => ['total_time' => 100],
+            'body' => fopen('tests/_data/index-create-response.json', 'r')
+        ]);
+        
+        $es = new Elasticsearch($config);
+        
+        $index = 'books';
+        $data = [
+            'settings' => [
+                'number_of_shards' => 1
+            ]
+        ];
+        
+        $result = $es->indexCreate($index, $data);
+        
+        $this->assertTrue($result['acknowledged']);
+        $this->assertTrue($result['shards_acknowledged']);
+    }
+    
+    public function testIndexExists()
+    {
+        $config = $this->getConfig();
+        $config['handler'] = new MockHandler([
+            'status' => 200,
+            'transfer_stats' => ['total_time' => 100]
+        ]);
+        
+        $es = new Elasticsearch($config);
+        
+        $index = 'books';
+        
+        $result = $es->indexExists($index);
+        
+        $this->assertTrue($result);
+    }
+    
+    public function testIndexDelete()
+    {
+        $config = $this->getConfig();
+        $config['handler'] = new MockHandler([
+            'status' => 200,
+            'transfer_stats' => ['total_time' => 100],
+            'body' => fopen('tests/_data/index-delete-response.json', 'r')
+        ]);
+        
+        $es = new Elasticsearch($config);
+        
+        $index = 'books';
+        
+        $result = $es->indexDelete($index);
+        
+        $this->assertTrue($result['acknowledged']);
+    }
 }

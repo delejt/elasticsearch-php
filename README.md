@@ -45,6 +45,9 @@ $info = $es->client->info();
 Configuration is passed to Elasticsearch's configuration builder, which means you can provide any configuration options that it accepts.
 See [this](https://www.elastic.co/guide/en/elasticsearch/client/php-api/5.0/_configuration.html#_building_the_client_from_a_configuration_hash) link for more information.
 
+Add `["quiet" => true]` to the config if you want to add custom keys to the configuration.
+If quiet isn't provided, Elasticsearch will throw an exception if it encounters keys unrelated to the Elasticsearch client.
+
 ```php
 [
     'hosts' => ['localhost:9200'],
@@ -55,7 +58,6 @@ See [this](https://www.elastic.co/guide/en/elasticsearch/client/php-api/5.0/_con
 
 ## Search
 The `search()` method is used to perform common, basic search operations in Elasticsearch.
-It does not expose advanced options, so if you require that, use the Elasticsearch client directly.
 
 The method automatically [transforms filters](https://github.com/legalthings/elasticsearch-php#filters) and text searches to the correct Elasticsearch equivalent,
 so you don't have to do that manually.
@@ -114,8 +116,7 @@ $result = $es->search($index, $type, $text, $fields, $filter, $sort, $limit, $of
 
 
 ## Index
-The `index()` method is used to perform common, basic index operations in Elasticsearch.
-It does not expose advanced options, so if you require that, use the Elasticsearch client directly.
+The `index()` method is used to perform common, basic index operations in Elasticsearch
 
 ```php
 use LegalThings/Elasticsearch;
@@ -155,7 +156,6 @@ $result = $es->index($index, $type, $id, $data);
 
 ## Get
 The `get()` method is used to perform common, basic get operations in Elasticsearch.
-It does not expose advanced options, so if you require that, use the Elasticsearch client directly.
 
 ```php
 use LegalThings/Elasticsearch;
@@ -189,7 +189,6 @@ $result = $es->get($index, $type, $id);
 
 ## Delete
 The `delete()` method is used to perform common, basic delete operations in Elasticsearch.
-It does not expose advanced options, so if you require that, use the Elasticsearch client directly.
 
 ```php
 use LegalThings/Elasticsearch;
