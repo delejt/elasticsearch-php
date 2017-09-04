@@ -49,6 +49,33 @@ class ElasticsearchTest extends Test
         $this->assertEquals('5.3.0', $result['version']['number']);
     }
     
+    public function testIndex()
+    {
+        $config = $this->getConfig();
+        $config['handler'] = new MockHandler([
+            'status' => 200,
+            'transfer_stats' => ['total_time' => 100],
+            'body' => fopen('tests/_data/index-response.json', 'r')
+        ]);
+        
+        $es = new Elasticsearch($config);
+        
+        $index = 'books';
+        $type = 'ancient';
+        $id = '0001';
+        $data = [
+            'id' => '0001',
+            'updated' => '2017-01-01T00:00:00',
+            'year' => 1980,
+            'published' => false,
+            'name' => 'My book two'
+        ];
+        
+        $result = $es->index($index, $type, $id, $data);
+        
+        $this->assertTrue($result['created']);
+        $this->assertEquals('0001', $result['_id']);
+    }
     
     public function testSearch()
     {

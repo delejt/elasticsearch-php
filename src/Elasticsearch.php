@@ -97,4 +97,26 @@ class Elasticsearch
 
         return $this->client->search($params);
     }
+    
+    /**
+     * Index data in Elasticsearch only giving basic parameters
+     * 
+     * @param string       $index   index name
+     * @param string       $type    index type
+     * @param string       $id      identifier for the data
+     * @param array|object $data    data to index
+     * 
+     * @return array
+     */
+    public function index($index, $type, $id, $data)
+    {
+        $params = [
+            'index' => $index,
+            'type' => $type,
+            'id' => $id,
+            'body' => $data
+        ];
+
+        return $this->client->index($params);
+    }
 }

@@ -22,6 +22,37 @@ The library can be installed using composer.
     composer require legalthings/elasticsearch-php
 
 
+## Client
+To create a client you need to pass [configuration options](https://github.com/legalthings/elasticsearch-php#configuration).
+If no options are given, `localhost:9200` is automatically used as the host.
+
+```php
+use LegalThings/Elasticsearch;
+
+$config = ['hosts' => 'elasticsearch.example.com:9200'];
+
+$es = new Elasticsearch($config);
+```
+
+You can use the original [elastic/elasticsearch-php](https://github.com/elastic/elasticsearch-php) client directly if you need its functionality.
+
+```php
+$info = $es->client->info();
+```
+
+
+## Configuration
+Configuration is passed to Elasticsearch's configuration builder, which means you can provide any configuration options that it accepts.
+See [this](https://www.elastic.co/guide/en/elasticsearch/client/php-api/5.0/_configuration.html#_building_the_client_from_a_configuration_hash) link for more information.
+
+```php
+[
+    'hosts' => ['localhost:9200'],
+    'retries' => 2
+]
+```
+
+
 ## Search
 The search method is used to perform common, basic search operations in Elasticsearch.
 It does not expose advanced options, so if you require that, use the Elasticsearch client directly.
@@ -49,8 +80,9 @@ $limit = 15;
 $offset = 0;
 
 $result = $es->search($index, $type, $text, $fields, $filter, $sort, $limit, $offset);
+```
 
-/*
+```json
 {
   "took": 1,
   "timed_out": false,
@@ -78,7 +110,46 @@ $result = $es->search($index, $type, $text, $fields, $filter, $sort, $limit, $of
     }]
   }
 }
-*/
+```
+
+
+## Index
+The index method is used to perform common, basic index operations in Elasticsearch.
+It does not expose advanced options, so if you require that, use the Elasticsearch client directly.
+
+```php
+use LegalThings/Elasticsearch;
+
+$es = new Elasticsearch($config);
+        
+$index = 'books';
+$type = 'ancient';
+$id = '0001';
+$data = [
+    'id' => '0001',
+    'updated' => '2017-01-01T00:00:00',
+    'year' => 1980,
+    'published' => false,
+    'name' => 'My book two'
+];
+
+$result = $es->index($index, $type, $id, $data);
+```
+
+```json
+{
+  "_index": "books",
+  "_type": "ancient",
+  "_id": "0001",
+  "_version": 1,
+  "result": "created",
+  "_shards": {
+    "total": 2,
+    "successful": 1,
+    "failed": 0
+  },
+  "created": true
+}
 ```
 
 
@@ -168,16 +239,4 @@ $result = $es->client->indices()->create([
     'index' => 'my_index',
     'body' => ElasticMap::getFullTextSearchMapping()
 ]);
-```
-
-
-## Configuration
-You can use any configuration that Elasticsearch allows you to.
-See [this](https://www.elastic.co/guide/en/elasticsearch/client/php-api/5.0/_configuration.html#_building_the_client_from_a_configuration_hash) link for more information.
-
-```php
-[
-    'hosts' => ['localhost:9200'],
-    'retries' => 2
-]
 ```

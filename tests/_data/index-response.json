@@ -1,0 +1,13 @@
+{
+  "_index": "books",
+  "_type": "ancient",
+  "_id": "0001",
+  "_version": 1,
+  "result": "created",
+  "_shards": {
+    "total": 2,
+    "successful": 1,
+    "failed": 0
+  },
+  "created": true
+}
