@@ -77,6 +77,48 @@ class ElasticsearchTest extends Test
         $this->assertEquals('0001', $result['_id']);
     }
     
+    
+    public function testGet()
+    {
+        $config = $this->getConfig();
+        $config['handler'] = new MockHandler([
+            'status' => 200,
+            'transfer_stats' => ['total_time' => 100],
+            'body' => fopen('tests/_data/get-response.json', 'r')
+        ]);
+        
+        $es = new Elasticsearch($config);
+        
+        $index = 'books';
+        $type = 'ancient';
+        $id = '0001';
+        
+        $result = $es->get($index, $type, $id);
+        
+        $this->assertEquals('0001', $result['_source']['id']);
+    }
+    
+    public function testDelete()
+    {
+        $config = $this->getConfig();
+        $config['handler'] = new MockHandler([
+            'status' => 200,
+            'transfer_stats' => ['total_time' => 100],
+            'body' => fopen('tests/_data/delete-response.json', 'r')
+        ]);
+        
+        $es = new Elasticsearch($config);
+        
+        $index = 'books';
+        $type = 'ancient';
+        $id = '0001';
+        
+        $result = $es->delete($index, $type, $id);
+        
+        $this->assertEquals('deleted', $result['result']);
+        $this->assertEquals('0001', $result['_id']);
+    }
+    
     public function testSearch()
     {
         $config = $this->getConfig();
@@ -104,6 +146,6 @@ class ElasticsearchTest extends Test
         
         $result = $es->search($index, $type, $text, $fields, $filter, $sort, $limit, $offset);
         
-        $this->assertEquals('My book two', $result['hits']['hits'][0]['_source']['name']);
+        $this->assertEquals('0001', $result['hits']['hits'][0]['_source']['id']);
     }
 }

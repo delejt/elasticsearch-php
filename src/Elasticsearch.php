@@ -47,6 +47,68 @@ class Elasticsearch
     
     
     /**
+     * Index data in Elasticsearch only giving basic parameters
+     * 
+     * @param string       $index   index name
+     * @param string       $type    index type
+     * @param string       $id      identifier for the data
+     * @param array|object $data    data to index
+     * 
+     * @return array
+     */
+    public function index($index, $type, $id, $data)
+    {
+        $params = [
+            'index' => $index,
+            'type' => $type,
+            'id' => $id,
+            'body' => $data
+        ];
+
+        return $this->client->index($params);
+    }
+    
+    /**
+     * Get data in Elasticsearch only giving basic parameters
+     * 
+     * @param string       $index   index name
+     * @param string       $type    index type
+     * @param string       $id      identifier for the data
+     * 
+     * @return array
+     */
+    public function get($index, $type, $id)
+    {
+        $params = [
+            'index' => $index,
+            'type' => $type,
+            'id' => $id
+        ];
+
+        return $this->client->get($params);
+    }
+    
+    /**
+     * Delete data in Elasticsearch only giving basic parameters
+     * 
+     * @param string       $index   index name
+     * @param string       $type    index type
+     * @param string       $id      identifier for the data
+     * 
+     * @return array
+     */
+    public function delete($index, $type, $id)
+    {
+        $params = [
+            'index' => $index,
+            'type' => $type,
+            'id' => $id
+        ];
+
+        return $this->client->delete($params);
+    }
+    
+    /**
      * Search through Elasticsearch only giving basic parameters
      * This function will take care of transforming filters and queries to data that Elasticsearch expects
      * 
@@ -96,27 +158,5 @@ class Elasticsearch
         ];
 
         return $this->client->search($params);
-    }
-    
-    /**
-     * Index data in Elasticsearch only giving basic parameters
-     * 
-     * @param string       $index   index name
-     * @param string       $type    index type
-     * @param string       $id      identifier for the data
-     * @param array|object $data    data to index
-     * 
-     * @return array
-     */
-    public function index($index, $type, $id, $data)
-    {
-        $params = [
-            'index' => $index,
-            'type' => $type,
-            'id' => $id,
-            'body' => $data
-        ];
-
-        return $this->client->index($params);
     }
 }

@@ -1,0 +1,13 @@
+{
+  "found": true,
+  "_index": "books",
+  "_type": "ancient",
+  "_id": "0001",
+  "_version": 1,
+  "result": "deleted",
+  "_shards": {
+    "total": 2,
+    "successful": 1,
+    "failed": 0
+  }
+}

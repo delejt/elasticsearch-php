@@ -54,7 +54,7 @@ See [this](https://www.elastic.co/guide/en/elasticsearch/client/php-api/5.0/_con
 
 
 ## Search
-The search method is used to perform common, basic search operations in Elasticsearch.
+The `search()` method is used to perform common, basic search operations in Elasticsearch.
 It does not expose advanced options, so if you require that, use the Elasticsearch client directly.
 
 The method automatically [transforms filters](https://github.com/legalthings/elasticsearch-php#filters) and text searches to the correct Elasticsearch equivalent,
@@ -114,7 +114,7 @@ $result = $es->search($index, $type, $text, $fields, $filter, $sort, $limit, $of
 
 
 ## Index
-The index method is used to perform common, basic index operations in Elasticsearch.
+The `index()` method is used to perform common, basic index operations in Elasticsearch.
 It does not expose advanced options, so if you require that, use the Elasticsearch client directly.
 
 ```php
@@ -149,6 +149,73 @@ $result = $es->index($index, $type, $id, $data);
     "failed": 0
   },
   "created": true
+}
+```
+
+
+## Get
+The `get()` method is used to perform common, basic get operations in Elasticsearch.
+It does not expose advanced options, so if you require that, use the Elasticsearch client directly.
+
+```php
+use LegalThings/Elasticsearch;
+
+$es = new Elasticsearch($config);
+        
+$index = 'books';
+$type = 'ancient';
+$id = '0001';
+
+$result = $es->get($index, $type, $id);
+```
+
+```json
+{
+  "_index": "books",
+  "_type": "ancient",
+  "_id": "0001",
+  "_version": 1,
+  "found": true,
+  "_source": {
+    "id": "0001",
+    "updated": "2017-01-01T00:00:00",
+    "year": 1980,
+    "published": false,
+    "name": "My book two"
+  }
+}
+```
+
+
+## Delete
+The `delete()` method is used to perform common, basic delete operations in Elasticsearch.
+It does not expose advanced options, so if you require that, use the Elasticsearch client directly.
+
+```php
+use LegalThings/Elasticsearch;
+
+$es = new Elasticsearch($config);
+        
+$index = 'books';
+$type = 'ancient';
+$id = '0001';
+
+$result = $es->delete($index, $type, $id);
+```
+
+```json
+{
+  "found": true,
+  "_index": "books",
+  "_type": "ancient",
+  "_id": "0001",
+  "_version": 1,
+  "result": "deleted",
+  "_shards": {
+    "total": 2,
+    "successful": 1,
+    "failed": 0
+  }
 }
 ```
 
