@@ -3,7 +3,8 @@ Legal Things - Elasticsearch PHP
 
 This library aims to provide you with a simplified interface to use Elasticsearch.
 Internally it uses the original [elastic/elasticsearch-php](https://github.com/elastic/elasticsearch-php) library.
-The client of the original library is exposed and can be used if you require more advanced functionality.
+
+The client of the original library is exposed and can be used if needed.
 
 ## Requirements
 
@@ -21,7 +22,12 @@ The library can be installed using composer.
     composer require legalthings/elasticsearch-php
 
 
-## Usage
+## Search
+The search method is used to perform common, basic search operations in Elasticsearch.
+It does not expose advanced options, so if you require that, use the Elasticsearch client directly.
+
+The method automatically [transforms filters](https://github.com/legalthings/elasticsearch-php#filters) and text searches to the correct Elasticsearch equivalent,
+so you don't have to do that manually.
 
 ```php
 use LegalThings/Elasticsearch;
@@ -128,8 +134,6 @@ $this->assertEquals([
 
 The library comes with predefined [Elasticsearch mappings](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html#mapping) that you can use.
 See [this](https://github.com/legalthings/elasticsearch-php/blob/master/src/ElasticMap.php) file for more maps.
-The maps can be easily extended since they are just arrays.
-Feel free to contribute by adding more frequently used maps.
 
 ```php
 use LegalThings/ElasticMap;
@@ -145,13 +149,11 @@ $result = $es->client->indices()->create([
 
 ## Configuration
 You can use any configuration that Elasticsearch allows you to.
-See [this](https://www.elastic.co/guide/en/elasticsearch/client/php-api/current/_configuration.html#_building_the_client_from_a_configuration_hash) link for more information.
+See [this](https://www.elastic.co/guide/en/elasticsearch/client/php-api/5.0/_configuration.html#_building_the_client_from_a_configuration_hash) link for more information.
 
 ```php
 [
-    'hosts' => [
-      'localhost:9200'
-    ],
+    'hosts' => ['localhost:9200'],
     'retries' => 2
 ]
 ```
