@@ -129,6 +129,30 @@ $this->assertEquals([
 ], $query);
 ```
 
+Alternatively the filter can be composed using a [fluent interface](https://en.wikipedia.org/wiki/Fluent_interface).
+This will output the same query as the example above.
+
+```php
+use LegalThings/ElasticFilter;
+
+$ef = new ElasticFilter();
+
+$query = $ef->addDefaultFilter('id', '0001')
+    ->addDefaultFilter('authors', ['John', 'Jane'])
+    ->addDefaultFilter('deleted', null)
+    ->addMinFilter('start_date', '2017-01-01T00:00:00')
+    ->addMaxFilter('end_date', '2018-01-01T00:00:00')
+    ->addMinFilter('age', 25)
+    ->addNotFilter('tags', ['foo', 'bar'])
+    ->addNotFilter('published', null)
+    ->addAnyFilter('colors', ['blue', 'green'])
+    ->addNoneFilter('colors', ['red'])
+    ->addAllFilter('category', ['A', 'B', 'C'])
+    ->transform();
+
+$this->assertEquals([...], $query); // same output as first example
+```
+
 
 ## Mapping
 

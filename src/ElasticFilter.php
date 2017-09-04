@@ -15,15 +15,21 @@ class ElasticFilter
      */
     public $filter;
     
+    /**
+     * @var array
+     */
+    public $transformed;
+    
     
     /**
      * Class constructor
      * 
      * @param object|array $filter
      */
-    public function __construct($filter)
+    public function __construct($filter = [])
     {
         $this->filter = (array)$filter;
+        $this->transformed = [];
     }
 
     
@@ -41,21 +47,19 @@ class ElasticFilter
      */
     public function transform()
     {
-        $query = [];
-
         foreach ($this->filter as $key => $value) {
             list($field, $operator) = array_map('trim', explode('(', str_replace(')', '', $key))) + [1 => 'default'];
 
-            $fn = camelcase("filter_${operator}");
+            $fn = $this->camelcase("add_${operator}_filter");
             
             if (!method_exists($this, $fn)) {
                 throw new Exception("Invalid filter key '$key'. Unknown operator '$operator'.");
             }
 
-            call_user_func_array([$this, $fn], [&$field, &$value, &$query]);
+            call_user_func_array([$this, $fn], [$field, $value]);
         }
 
-        return $query;
+        return $this->transformed;
     }
     
     
@@ -65,18 +69,17 @@ class ElasticFilter
      * 
      * @param type $field
      * @param type $value
-     * @param type $query
      * 
      * @return $this
      */
-    public function filterDefault(&$field, &$value, &$query)
+    public function addDefaultFilter($field, $value)
     {
         if (is_null($value)) {
-            $query['bool']['must'][]['missing']['field'] = $field;
+            $this->transformed['bool']['must'][]['missing']['field'] = $field;
         } else if (is_array($value)) {
-            $query['bool']['must'][]['terms'][$field] = $value;
+            $this->transformed['bool']['must'][]['terms'][$field] = $value;
         } else {
-            $query['bool']['must'][]['term'][$field] = $value;
+            $this->transformed['bool']['must'][]['term'][$field] = $value;
         }
         
         return $this;
@@ -88,18 +91,17 @@ class ElasticFilter
      * 
      * @param type $field
      * @param type $value
-     * @param type $query
      * 
      * @return $this
      */
-    public function filterNot(&$field, &$value, &$query)
+    public function addNotFilter($field, $value)
     {
         if (is_null($value)) {
-            $query['bool']['must_not'][]['missing']['field'] = $field;
+            $this->transformed['bool']['must_not'][]['missing']['field'] = $field;
         } else if (is_array($value)) {
-            $query['bool']['must_not'][]['terms'][$field] = $value;
+            $this->transformed['bool']['must_not'][]['terms'][$field] = $value;
         } else {
-            $query['bool']['must_not'][]['term'][$field] = $value;
+            $this->transformed['bool']['must_not'][]['term'][$field] = $value;
         }
         
         return $this;
@@ -111,13 +113,12 @@ class ElasticFilter
      * 
      * @param type $field
      * @param type $value
-     * @param type $query
      * 
      * @return $this
      */
-    public function filterMin(&$field, &$value, &$query)
+    public function addMinFilter($field, $value)
     {
-        $query['bool']['must'][]['range'][$field] = ['gte' => $value];
+        $this->transformed['bool']['must'][]['range'][$field] = ['gte' => $value];
         
         return $this;
     }
@@ -128,13 +129,12 @@ class ElasticFilter
      * 
      * @param type $field
      * @param type $value
-     * @param type $query
      * 
      * @return $this
      */
-    public function filterMax(&$field, &$value, &$query)
+    public function addMaxFilter($field, $value)
     {
-        $query['bool']['must'][]['range'][$field] = ['lte' => $value];
+        $this->transformed['bool']['must'][]['range'][$field] = ['lte' => $value];
         
         return $this;
     }
@@ -145,13 +145,12 @@ class ElasticFilter
      * 
      * @param type $field
      * @param type $value
-     * @param type $query
      * 
      * @return $this
      */
-    public function filterAny(&$field, &$value, &$query)
+    public function addAnyFilter($field, $value)
     {
-        $query['bool']['must'][]['terms'][$field] = $value;
+        $this->transformed['bool']['must'][]['terms'][$field] = $value;
         
         return $this;
     }
@@ -162,13 +161,12 @@ class ElasticFilter
      * 
      * @param type $field
      * @param type $value
-     * @param type $query
      * 
      * @return $this
      */
-    public function filterNone(&$field, &$value, &$query)
+    public function addNoneFilter($field, $value)
     {
-        $query['bool']['must_not'][]['term'][$field] = $value;
+        $this->transformed['bool']['must_not'][]['term'][$field] = $value;
         
         return $this;
     }
@@ -179,13 +177,13 @@ class ElasticFilter
      * 
      * @param type $field
      * @param type $value
-     * @param type $query
+
      * 
      * @return $this
      */
-    public function filterAll(&$field, &$value, &$query)
+    public function addAllFilter($field, $value)
     {
-        $query['bool']['must'][]['term'][$field] = $value;
+        $this->transformed['bool']['must'][]['term'][$field] = $value;
         
         return $this;
     }

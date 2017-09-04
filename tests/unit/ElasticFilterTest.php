@@ -61,6 +61,43 @@ class ElasticFilterTest extends Test
         ], $query);
     }
     
+    public function testFilterChaining()
+    {
+        $ef = new ElasticFilter();
+
+        $query = $ef->addDefaultFilter('id', '0001')
+            ->addDefaultFilter('authors', ['John', 'Jane'])
+            ->addDefaultFilter('deleted', null)
+            ->addMinFilter('start_date', '2017-01-01T00:00:00')
+            ->addMaxFilter('end_date', '2018-01-01T00:00:00')
+            ->addMinFilter('age', 25)
+            ->addNotFilter('tags', ['foo', 'bar'])
+            ->addNotFilter('published', null)
+            ->addAnyFilter('colors', ['blue', 'green'])
+            ->addNoneFilter('colors', ['red'])
+            ->addAllFilter('category', ['A', 'B', 'C'])
+            ->transform();
+        
+        $this->assertEquals([
+            'bool' => [
+                'must' => [
+                    [ 'term' => [ 'id' => '0001' ] ],
+                    [ 'terms' => [ 'authors' => ['John', 'Jane'] ] ],
+                    [ 'missing' => [ 'field' => 'deleted' ] ],
+                    [ 'range' => [ 'start_date' => [ 'gte' => '2017-01-01T00:00:00' ] ] ],
+                    [ 'range' => [ 'end_date' => [ 'lte' => '2018-01-01T00:00:00' ] ] ],
+                    [ 'range' => [ 'age' => [ 'gte' => 25 ] ] ],
+                    [ 'terms' => [ 'colors' => [ 'blue', 'green' ] ] ],
+                    [ 'term' => [ 'category' => [ 'A', 'B', 'C' ] ] ]
+                ],
+                'must_not' => [
+                    [ 'terms' => [ 'tags' => [ 'foo', 'bar' ] ] ],
+                    [ 'missing' => [ 'field' => 'published' ] ],
+                    [ 'term' => [ 'colors' => [ 'red' ] ] ]
+                ]
+            ]
+        ], $query);
+    }
     
     /**
      * @expectedException \Exception
