@@ -154,6 +154,40 @@ $result = $es->index($index, $type, $id, $data);
 ```
 
 
+## Update
+The `update()` method is used to perform common, basic update operations in Elasticsearch, which partially updates a document
+
+```php
+use LegalThings/Elasticsearch;
+
+$es = new Elasticsearch($config);
+        
+$index = 'books';
+$type = 'ancient';
+$id = '0001';
+$data = [
+    'name' => 'My book three'
+];
+
+$result = $es->update($index, $type, $id, $data);
+```
+
+```json
+{
+  "_index": "books",
+  "_type": "ancient",
+  "_id": "0001",
+  "_version": 2,
+  "result": "updated",
+  "_shards": {
+    "total": 0,
+    "successful": 0,
+    "failed": 0
+  }
+}
+```
+
+
 ## Get
 The `get()` method is used to perform common, basic get operations in Elasticsearch.
 

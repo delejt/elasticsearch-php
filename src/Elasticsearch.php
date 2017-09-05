@@ -71,6 +71,28 @@ class Elasticsearch
     }
     
     /**
+     * Update data in Elasticsearch
+     * 
+     * @param string       $index   index name
+     * @param string       $type    index type
+     * @param string       $id      identifier for the data
+     * @param array|object $data    data to index
+     * 
+     * @return array
+     */
+    public function update($index, $type, $id, $data)
+    {
+        $params = [
+            'index' => $index,
+            'type' => $type,
+            'id' => $id,
+            'body' => ['doc' => $data]
+        ];
+        
+        return $this->client->update($params);
+    }
+    
+    /**
      * Get data in Elasticsearch
      * 
      * @param string       $index   index name

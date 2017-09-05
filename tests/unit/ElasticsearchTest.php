@@ -77,6 +77,29 @@ class ElasticsearchTest extends Test
         $this->assertEquals('0001', $result['_id']);
     }
     
+    public function testUpdate()
+    {
+        $config = $this->getConfig();
+        $config['handler'] = new MockHandler([
+            'status' => 200,
+            'transfer_stats' => ['total_time' => 100],
+            'body' => fopen('tests/_data/update-response.json', 'r')
+        ]);
+        
+        $es = new Elasticsearch($config);
+        
+        $index = 'books';
+        $type = 'ancient';
+        $id = '0001';
+        $data = [
+            'name' => 'My book three'
+        ];
+        
+        $result = $es->update($index, $type, $id, $data);
+        
+        $this->assertEquals('updated', $result['result']);
+        $this->assertEquals('0001', $result['_id']);
+    }
     
     public function testGet()
     {
