@@ -143,20 +143,28 @@ class Elasticsearch
             $sort = (new ElasticSort($sort))->transform();
         }
         
+        $body = [
+            'query' => [
+                'bool' => [
+                    'must' => $text,
+                    'filter' => $filter
+                ]
+            ]
+        ];
+        
+        if (isset($offset)) {
+            $body['from'] = $offset;
+        }
+        
+        if (isset($limit)) {
+            $body['size'] = $limit;
+        }
+        
         $params = [
             'index' => $index,
             'type' => $type,
             'sort' => $sort,
-            'body' => [
-                'from' => $offset,
-                'size' => $limit,
-                'query' => [
-                    'bool' => [
-                        'must' => $text,
-                        'filter' => $filter
-                    ]
-                ]
-            ]
+            'body' => $body
         ];
 
         return $this->client->search($params);
