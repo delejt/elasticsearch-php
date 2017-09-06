@@ -108,6 +108,50 @@ class ElasticFilter
     }
     
     /**
+     * Transform 'should' filter, to Elasticsearch equivalent
+     * Example ['foo(should)' => 'bar']
+     * 
+     * @param type $field
+     * @param type $value
+     * 
+     * @return $this
+     */
+    public function addShouldFilter($field, $value)
+    {
+        if (is_null($value)) {
+            $this->transformed['bool']['should'][]['missing']['field'] = $field;
+        } else if (is_array($value)) {
+            $this->transformed['bool']['should'][]['terms'][$field] = $value;
+        } else {
+            $this->transformed['bool']['should'][]['term'][$field] = $value;
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * Transform 'should_not' filter, to Elasticsearch equivalent
+     * Example ['foo(should_not)' => 'bar']
+     * 
+     * @param type $field
+     * @param type $value
+     * 
+     * @return $this
+     */
+    public function addShouldNotFilter($field, $value)
+    {
+        if (is_null($value)) {
+            $this->transformed['bool']['should_not'][]['missing']['field'] = $field;
+        } else if (is_array($value)) {
+            $this->transformed['bool']['should_not'][]['terms'][$field] = $value;
+        } else {
+            $this->transformed['bool']['should_not'][]['term'][$field] = $value;
+        }
+        
+        return $this;
+    }
+    
+    /**
      * Transform 'min' filter, to Elasticsearch equivalent
      * Example ['foo(min)' => 3]
      * 

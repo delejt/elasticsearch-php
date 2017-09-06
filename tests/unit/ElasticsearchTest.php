@@ -169,6 +169,7 @@ class ElasticsearchTest extends Test
         
         $result = $es->search($index, $type, $text, $fields, $filter, $sort, $limit, $offset);
         
+        $this->assertCount(1, $result['hits']['hits']);
         $this->assertEquals('0001', $result['hits']['hits'][0]['_source']['id']);
     }
     

@@ -34,7 +34,13 @@ class ElasticFilterTest extends Test
             'published(not)' => null,
             'colors(any)' => ['blue', 'green'],
             'colors(none)' => ['red'],
-            'category(all)' => ['A', 'B', 'C']
+            'category(all)' => ['A', 'B', 'C'],
+            'permissions(should)' => ['read', 'all'],
+            'type(should)' => 'book',
+            'random(should)' => null,
+            'stuff(should_not)' => ['this', 'that'],
+            'sub_type(should_not)' => 'modern',
+            'property(should_not)' => null
         ];
 
         $ef = new ElasticFilter($filter);
@@ -44,7 +50,7 @@ class ElasticFilterTest extends Test
             'bool' => [
                 'must' => [
                     [ 'term' => [ 'id' => '0001' ] ],
-                    [ 'terms' => [ 'authors' => ['John', 'Jane'] ] ],
+                    [ 'terms' => [ 'authors' => [ 'John', 'Jane' ] ] ],
                     [ 'missing' => [ 'field' => 'deleted' ] ],
                     [ 'range' => [ 'start_date' => [ 'gte' => '2017-01-01T00:00:00' ] ] ],
                     [ 'range' => [ 'end_date' => [ 'lte' => '2018-01-01T00:00:00' ] ] ],
@@ -56,6 +62,16 @@ class ElasticFilterTest extends Test
                     [ 'terms' => [ 'tags' => [ 'foo', 'bar' ] ] ],
                     [ 'missing' => [ 'field' => 'published' ] ],
                     [ 'term' => [ 'colors' => [ 'red' ] ] ]
+                ],
+                'should' => [
+                    [ 'terms' => [ 'permissions' => [ 'read', 'all' ] ] ],
+                    [ 'term' => [ 'type' => 'book' ] ],
+                    [ 'missing' => [ 'field' => 'random' ] ]
+                ],
+                'should_not' => [
+                    [ 'terms' => [ 'stuff' => [ 'this', 'that' ] ] ],
+                    [ 'term' => [ 'sub_type' => 'modern' ] ],
+                    [ 'missing' => [ 'field' => 'property' ] ]
                 ]
             ]
         ], $query);
@@ -76,6 +92,12 @@ class ElasticFilterTest extends Test
             ->addAnyFilter('colors', ['blue', 'green'])
             ->addNoneFilter('colors', ['red'])
             ->addAllFilter('category', ['A', 'B', 'C'])
+            ->addShouldFilter('permissions', ['read', 'all'])
+            ->addShouldFilter('type', 'book')
+            ->addShouldFilter('random', null)
+            ->addShouldNotFilter('stuff', ['this', 'that'])
+            ->addShouldNotFilter('sub_type', 'modern')
+            ->addShouldNotFilter('property', null)
             ->transform();
         
         $this->assertEquals([
@@ -94,6 +116,16 @@ class ElasticFilterTest extends Test
                     [ 'terms' => [ 'tags' => [ 'foo', 'bar' ] ] ],
                     [ 'missing' => [ 'field' => 'published' ] ],
                     [ 'term' => [ 'colors' => [ 'red' ] ] ]
+                ],
+                'should' => [
+                    [ 'terms' => [ 'permissions' => [ 'read', 'all' ] ] ],
+                    [ 'term' => [ 'type' => 'book' ] ],
+                    [ 'missing' => [ 'field' => 'random' ] ]
+                ],
+                'should_not' => [
+                    [ 'terms' => [ 'stuff' => [ 'this', 'that' ] ] ],
+                    [ 'term' => [ 'sub_type' => 'modern' ] ],
+                    [ 'missing' => [ 'field' => 'property' ] ]
                 ]
             ]
         ], $query);
