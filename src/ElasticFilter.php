@@ -75,7 +75,7 @@ class ElasticFilter
     public function addDefaultFilter($field, $value)
     {
         if (is_null($value)) {
-            $this->transformed['bool']['must'][]['missing']['field'] = $field;
+            $this->transformed['bool']['must'][]['exists']['field'] = $field;
         } else if (is_array($value)) {
             $this->transformed['bool']['must'][]['terms'][$field] = $value;
         } else {
@@ -97,7 +97,7 @@ class ElasticFilter
     public function addNotFilter($field, $value)
     {
         if (is_null($value)) {
-            $this->transformed['bool']['must_not'][]['missing']['field'] = $field;
+            $this->transformed['bool']['must_not'][]['exists']['field'] = $field;
         } else if (is_array($value)) {
             $this->transformed['bool']['must_not'][]['terms'][$field] = $value;
         } else {
@@ -119,7 +119,7 @@ class ElasticFilter
     public function addShouldFilter($field, $value)
     {
         if (is_null($value)) {
-            $this->transformed['bool']['should'][]['missing']['field'] = $field;
+            $this->transformed['bool']['should'][]['exists']['field'] = $field;
         } else if (is_array($value)) {
             $this->transformed['bool']['should'][]['terms'][$field] = $value;
         } else {
@@ -141,7 +141,7 @@ class ElasticFilter
     public function addShouldNotFilter($field, $value)
     {
         if (is_null($value)) {
-            $this->transformed['bool']['should_not'][]['missing']['field'] = $field;
+            $this->transformed['bool']['should_not'][]['exists']['field'] = $field;
         } else if (is_array($value)) {
             $this->transformed['bool']['should_not'][]['terms'][$field] = $value;
         } else {

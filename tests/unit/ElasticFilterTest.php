@@ -51,7 +51,7 @@ class ElasticFilterTest extends Test
                 'must' => [
                     [ 'term' => [ 'id' => '0001' ] ],
                     [ 'terms' => [ 'authors' => [ 'John', 'Jane' ] ] ],
-                    [ 'missing' => [ 'field' => 'deleted' ] ],
+                    [ 'exists' => [ 'field' => 'deleted' ] ],
                     [ 'range' => [ 'start_date' => [ 'gte' => '2017-01-01T00:00:00' ] ] ],
                     [ 'range' => [ 'end_date' => [ 'lte' => '2018-01-01T00:00:00' ] ] ],
                     [ 'range' => [ 'age' => [ 'gte' => 25 ] ] ],
@@ -60,18 +60,18 @@ class ElasticFilterTest extends Test
                 ],
                 'must_not' => [
                     [ 'terms' => [ 'tags' => [ 'foo', 'bar' ] ] ],
-                    [ 'missing' => [ 'field' => 'published' ] ],
+                    [ 'exists' => [ 'field' => 'published' ] ],
                     [ 'term' => [ 'colors' => [ 'red' ] ] ]
                 ],
                 'should' => [
                     [ 'terms' => [ 'permissions' => [ 'read', 'all' ] ] ],
                     [ 'term' => [ 'type' => 'book' ] ],
-                    [ 'missing' => [ 'field' => 'random' ] ]
+                    [ 'exists' => [ 'field' => 'random' ] ]
                 ],
                 'should_not' => [
                     [ 'terms' => [ 'stuff' => [ 'this', 'that' ] ] ],
                     [ 'term' => [ 'sub_type' => 'modern' ] ],
-                    [ 'missing' => [ 'field' => 'property' ] ]
+                    [ 'exists' => [ 'field' => 'property' ] ]
                 ]
             ]
         ], $query);
@@ -105,7 +105,7 @@ class ElasticFilterTest extends Test
                 'must' => [
                     [ 'term' => [ 'id' => '0001' ] ],
                     [ 'terms' => [ 'authors' => ['John', 'Jane'] ] ],
-                    [ 'missing' => [ 'field' => 'deleted' ] ],
+                        [ 'exists' => [ 'field' => 'deleted' ] ],
                     [ 'range' => [ 'start_date' => [ 'gte' => '2017-01-01T00:00:00' ] ] ],
                     [ 'range' => [ 'end_date' => [ 'lte' => '2018-01-01T00:00:00' ] ] ],
                     [ 'range' => [ 'age' => [ 'gte' => 25 ] ] ],
@@ -114,18 +114,18 @@ class ElasticFilterTest extends Test
                 ],
                 'must_not' => [
                     [ 'terms' => [ 'tags' => [ 'foo', 'bar' ] ] ],
-                    [ 'missing' => [ 'field' => 'published' ] ],
+                    [ 'exists' => [ 'field' => 'published' ] ],
                     [ 'term' => [ 'colors' => [ 'red' ] ] ]
                 ],
                 'should' => [
                     [ 'terms' => [ 'permissions' => [ 'read', 'all' ] ] ],
                     [ 'term' => [ 'type' => 'book' ] ],
-                    [ 'missing' => [ 'field' => 'random' ] ]
+                    [ 'exists' => [ 'field' => 'random' ] ]
                 ],
                 'should_not' => [
                     [ 'terms' => [ 'stuff' => [ 'this', 'that' ] ] ],
                     [ 'term' => [ 'sub_type' => 'modern' ] ],
-                    [ 'missing' => [ 'field' => 'property' ] ]
+                    [ 'exists' => [ 'field' => 'property' ] ]
                 ]
             ]
         ], $query);
