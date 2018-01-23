@@ -77,6 +77,23 @@ class ElasticFilterTest extends Test
         ], $query);
     }
     
+    public function testTransformRaw()
+    {
+        $filter = [
+            'foo' => 'bar',
+            'not' => 'modified',
+            'es_raw' => 1
+        ];
+
+        $ef = new ElasticFilter($filter);
+        $query = $ef->transform();
+        
+        $this->assertEquals([
+            'foo' => 'bar',
+            'not' => 'modified'
+        ], $query);
+    }
+    
     public function testFilterChaining()
     {
         $ef = new ElasticFilter();

@@ -47,6 +47,12 @@ class ElasticFilter
      */
     public function transform()
     {
+        if (isset($this->filter['es_raw']) && $this->filter['es_raw']) {
+            // use the raw query instead of converting it
+            unset($this->filter['es_raw']);
+            return $this->transform = $this->filter;
+        }
+
         foreach ($this->filter as $key => $value) {
             list($field, $operator) = array_map('trim', explode('(', str_replace(')', '', $key))) + [1 => 'default'];
 
