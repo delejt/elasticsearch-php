@@ -154,7 +154,13 @@ class Elasticsearch
     public function search($index, $type, $text = null, $fields = [], $filter = [], $sort = [], $limit = null, $offset = null)
     {
         if (isset($text)) {
-            $text = ['query_string' => ['query' => $text, 'fields' => $fields]];
+            $text = [
+                'query_string' => [
+                    'query' => $text,
+                    'fields' => $fields,
+                    'default_operator' => 'AND'
+                ]
+            ];
         }
         
         if (isset($filter)) {
